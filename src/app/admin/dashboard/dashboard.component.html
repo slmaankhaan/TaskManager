@@ -24,16 +24,16 @@
           font-family: 'Arial Narrow Bold', sans-serif;
         "
       >
-        {{ Designation }}
+        {{ Designation | uppercase }}
       </div>
       <div class="col-12 text-center mt-2">
-        <img src="assets/user.png" width="120px" />
+        <img src="../../../assets/user.png" width="120px" />
       </div>
       <div
         class="col-12 text-center pt-2 pb-2 font-weight-bold"
         style="font-family: Tahoma"
       >
-        {{ Username }}
+        {{ Username | lowercase }}
       </div>
       <div class="col-12 text-center pt-2 pb-2" style="font-family: Arial">
         TEAM SUMMARY
@@ -136,6 +136,8 @@
                   class="dropdown-item"
                   href="#"
                   *ngFor="let project of Projects"
+                  onclick="return false"
+                  (click)="onProjectChange($event)"
                   >{{ project }}</a
                 >
               </div>
@@ -180,15 +182,15 @@
         <table class="table table-borderless">
           <tr>
             <td>Project Cost</td>
-            <td>${{ ProjectCost }}</td>
+            <td>{{ ProjectCost | currency:"USD"}}</td>
           </tr>
           <tr>
             <td>Current Expenditure</td>
-            <td>${{ CurrentExpenditure }}</td>
+            <td>{{ CurrentExpenditure | currency: "USD"}}</td>
           </tr>
           <tr>
             <td>Available Funds</td>
-            <td>${{ AvailableFunds }}</td>
+            <td>{{ AvailableFunds | currency: "USD" }}</td>
           </tr>
         </table>
       </div>
@@ -267,6 +269,7 @@
               [id]="'cardbody1' + i"
               class="collapse"
               data-parent="#accordion1"
+              [ngClass]="i == 0 ? 'show' : ''"
             >
               <div class="card-body">
                 <table class="table">
@@ -278,10 +281,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let members of teamMembersGroup.Members">
-                      <td>{{ members.ID }}</td>
-                      <td>{{ members.Name }}</td>
-                      <td>{{ members.Status }}</td>
+                    <tr *ngFor="let member of teamMembersGroup.Members">
+                      <td>{{ member.ID }}</td>
+                      <td>{{ member.Name }}</td>
+                      <td
+                        [style.color]="
+                          member.Status == 'Busy' ? 'red' : 'black'
+                        "
+                      >
+                        {{ member.Status }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
