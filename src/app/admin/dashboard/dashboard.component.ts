@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../../dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,8 +23,20 @@ export class DashboardComponent implements OnInit {
   TeamMembersSummary: any = [];
   TeamMembers: any = [];
 
-  // constructor() { }
+  /** Notice, we are not creating any object for the DashboardComponent;
+   * but when the user reaches to "dashboard" route, system will automatically
+   * create an object for the DashboardComponent class;at that time, the constructor
+   * will execute automatically.There we have to inject, DashboardService.Here the
+   * "dashboardService" is a reference variable.And in order to make this reference
+   * variable as a property of the current working class, we require to add the keyword "private".
+   * And also we require to provide the data type of the reference variable as a "DashboardService".
+   * And also we have to import the DashboardService from "dashboard.service.ts" file.
+   *
+   * Now we can access the reference variable, "dashboardService" from any method of the DashboardComponent,
+   * because it is a property of the DashboardComponent.We're not going to use the DashboardService in the
+   * constructor; but we are going to use the same in ngOnInit method.**/
 
+  constructor(private dashboardService: DashboardService) {}
   ngOnInit(): void {
     this.Designation = 'Team Leader';
     this.Username = 'John Smith';
@@ -46,28 +59,37 @@ export class DashboardComponent implements OnInit {
 
     this.Years = [2021, 2020, 2019, 2018];
 
-    this.TeamMembersSummary = [
-      {
-        Region: 'East',
-        TeamMembersCount: 20,
-        TemporarilyUnavailableMembers: 4,
-      },
-      {
-        Region: 'West',
-        TeamMembersCount: 15,
-        TemporarilyUnavailableMembers: 8,
-      },
-      {
-        Region: 'South',
-        TeamMembersCount: 17,
-        TemporarilyUnavailableMembers: 1,
-      },
-      {
-        Region: 'North',
-        TeamMembersCount: 15,
-        TemporarilyUnavailableMembers: 6,
-      },
-    ];
+    /*** In the previous case, we are directly assigning the data into TeamMembersSummary property.But in this
+     * case, we have to call the same from the DashboardService.So this.dashboardService.getTeamMembersSummary( ).
+     * So this statement will automatically invoke the getTeamMembersSummary( ) method of the service and it is
+     * going to return an [ ] of objects.This data whatever is returned here will be received into the property
+     * called TeamMembersSummary.The same is being printed by using ngFor in the template.***/
+
+    this.TeamMembersSummary = this.dashboardService.getTeamMembersSummary();
+
+    /*** Previous Method ***/
+    // this.TeamMembersSummary = [
+    //   {
+    //     Region: 'East',
+    //     TeamMembersCount: 20,
+    //     TemporarilyUnavailableMembers: 4,
+    //   },
+    //   {
+    //     Region: 'West',
+    //     TeamMembersCount: 15,
+    //     TemporarilyUnavailableMembers: 8,
+    //   },
+    //   {
+    //     Region: 'South',
+    //     TeamMembersCount: 17,
+    //     TemporarilyUnavailableMembers: 1,
+    //   },
+    //   {
+    //     Region: 'North',
+    //     TeamMembersCount: 15,
+    //     TemporarilyUnavailableMembers: 6,
+    //   },
+    // ];
 
     this.TeamMembers = [
       {
